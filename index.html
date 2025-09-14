@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A collection of video articles on various topics">
+    <title>Video Collection</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Video Collection</h1>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search articles...">
+            </div>
+        </header>
+        
+        <main>
+            <ul id="articlesList" class="articles-list"></ul>
+        </main>
+    </div>
+
+    <script>
+        // Fetch and display articles
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const articlesList = document.getElementById('articlesList');
+                const articles = data.articles;
+                
+                // Store articles for search functionality
+                window.articlesData = articles;
+                
+                // Display all articles initially
+                displayArticles(articles);
+                
+                // Add search functionality
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const filteredArticles = articles.filter(article => 
+                        article.title.toLowerCase().includes(searchTerm)
+                    );
+                    displayArticles(filteredArticles);
+                });
+            })
+            .catch(error => console.error('Error loading articles:', error));
+            
+        function displayArticles(articles) {
+            const articlesList = document.getElementById('articlesList');
+            articlesList.innerHTML = '';
+            
+            if (articles.length === 0) {
+                articlesList.innerHTML = '<li class="no-results">No articles found</li>';
+                return;
+            }
+            
+            articles.forEach(article => {
+                const listItem = document.createElement('li');
+                listItem.className = 'article-item';
+                
+                const link = document.createElement('a');
+                link.href = `/f/${article.id}`;
+                link.textContent = article.title;
+                
+                listItem.appendChild(link);
+                articlesList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
