@@ -34,7 +34,12 @@
         
         // Fetch and display article
         fetch('data.json')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 const article = data.articles.find(a => a.id === articleId);
                 
@@ -64,11 +69,11 @@
             const videosList = document.createElement('ul');
             videosList.className = 'videos-list';
             
-            article.videoUrls.forEach(url => {
+            article.videoUrls.forEach((url, index) => {
                 const listItem = document.createElement('li');
                 const link = document.createElement('a');
                 link.href = url;
-                link.textContent = 'Watch Video: ' + getDomainFromUrl(url);
+                link.textContent = `Video ${index + 1}: ${getDomainFromUrl(url)}`;
                 link.target = '_blank';
                 link.rel = 'noopener noreferrer';
                 
