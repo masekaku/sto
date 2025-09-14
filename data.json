@@ -1,0 +1,37 @@
+{
+  "articles": [
+    {
+      "id": "1",
+      "title": "Introduction to Web Development",
+      "videoUrls": [
+        "https://www.youtube.com/watch?v=abc123",
+        "https://vimeo.com/123456"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "JavaScript Fundamentals",
+      "videoUrls": [
+        "https://www.youtube.com/watch?v=def456",
+        "https://vimeo.com/789012",
+        "https://www.youtube.com/watch?v=ghi789"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "CSS Styling Techniques",
+      "videoUrls": [
+        "https://www.youtube.com/watch?v=jkl012",
+        "https://vimeo.com/345678"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "React for Beginners",
+      "videoUrls": [
+        "https://www.youtube.com/watch?v=mno345",
+        "https://vimeo.com/901234"
+      ]
+    }
+  ]
+}
