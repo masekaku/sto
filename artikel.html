@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Article detail page">
+    <title>Article</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="home-link">← Back to Home</a>
+            <h1 id="articleTitle">Loading article...</h1>
+        </header>
+        
+        <main>
+            <div id="videoLinks" class="video-links"></div>
+            <div id="errorMessage" class="error-message" style="display: none;">
+                Article not found
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Get article ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id');
+        
+        if (!articleId) {
+            showError();
+            return;
+        }
+        
+        // Fetch and display article
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const article = data.articles.find(a => a.id === articleId);
+                
+                if (article) {
+                    displayArticle(article);
+                } else {
+                    showError();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading article:', error);
+                showError();
+            });
+            
+        function displayArticle(article) {
+            document.title = article.title + " - Video Collection";
+            document.getElementById('articleTitle').textContent = article.title;
+            
+            const videoLinksContainer = document.getElementById('videoLinks');
+            videoLinksContainer.innerHTML = '';
+            
+            if (article.videoUrls.length === 0) {
+                videoLinksContainer.innerHTML = '<p>No videos available for this article.</p>';
+                return;
+            }
+            
+            const videosList = document.createElement('ul');
+            videosList.className = 'videos-list';
+            
+            article.videoUrls.forEach(url => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = 'Watch Video: ' + getDomainFromUrl(url);
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                
+                listItem.appendChild(link);
+                videosList.appendChild(listItem);
+            });
+            
+            videoLinksContainer.appendChild(videosList);
+        }
+        
+        function getDomainFromUrl(url) {
+            try {
+                const domain = new URL(url).hostname;
+                return domain.replace('www.', '');
+            } catch (e) {
+                return url;
+            }
+        }
+        
+        function showError() {
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('articleTitle').textContent = 'Article Not Found';
+            document.getElementById('videoLinks').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
